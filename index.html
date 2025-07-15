@@ -60,31 +60,41 @@
   </div>
 
   <!-- JavaScript -->
-<script>
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbzvXdbKSLZUL8LIhrYqMTONWL6PrE5ITcb3Kw--RCayh9KZR9080uQ4IsAeQPR5zSvy/exec';
-  const form = document.getElementById('nameForm');
-  const nameInput = document.getElementById('name');
+  <script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzvXdbKSLZUL8LIhrYqMTONWL6PrE5ITcb3Kw--RCayh9KZR9080uQ4IsAeQPR5zSvy/exec'; // 🔁 Replace with your deployed Google Apps Script URL
+    const form = document.getElementById('nameForm');
+    const nameInput = document.getElementById('name');
+    const successMessage = document.getElementById('successMessage');
+    const confirmationText = document.getElementById('confirmationText');
+    const editButton = document.getElementById('editButton');
 
-  form.addEventListener("submit", function(e) {
-    e.preventDefault();
+    let lastSubmittedName = "";
 
-    const fullName = nameInput.value.trim();
-    if (!fullName) return alert("Please enter a name.");
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
 
-    const formData = new FormData();
-    formData.append("name", fullName);
+      const fullName = nameInput.value.trim();
+      lastSubmittedName = fullName;
 
-    fetch(scriptURL, {
-      method: 'POST',
-      body: formData,
-      mode: 'no-cors'
+      fetch(scriptURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: fullName })
+      })
+      .then(response => response.text())
+      .then(result => {
+        confirmationText.innerText = `Submitted: "${fullName}"`;
+        successMessage.classList.remove('d-none');
+        nameInput.value = '';
+      })
+      .catch(error => alert("Fetch Error: " + error.message));
     });
 
-    nameInput.value = '';
-    alert("Submitted! Check your Google Sheet.");
-  });
-</script>
-
-
+    editButton.addEventListener("click", function() {
+      nameInput.value = lastSubmittedName;
+      nameInput.focus();
+      successMessage.classList.add('d-none');
+    });
+  </script>
 </body>
 </html>
