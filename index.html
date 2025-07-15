@@ -60,41 +60,44 @@
   </div>
 
   <!-- JavaScript -->
-  <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwpEpGG28ft5OU4Fdy3VJLD-Z4PpQPNElY16dbjYE1WM7OxBLJZMq61FoTzETnxxjrq/exec'; // 🔁 Replace with your deployed Google Apps Script URL
-    const form = document.getElementById('nameForm');
-    const nameInput = document.getElementById('name');
-    const successMessage = document.getElementById('successMessage');
-    const confirmationText = document.getElementById('confirmationText');
-    const editButton = document.getElementById('editButton');
+ <script>
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbwpEpGG28ft5OU4Fdy3VJLD-Z4PpQPNElY16dbjYE1WM7OxBLJZMq61FoTzETnxxjrq/exec';
+  const form = document.getElementById('nameForm');
+  const nameInput = document.getElementById('name');
+  const successMessage = document.getElementById('successMessage');
+  const confirmationText = document.getElementById('confirmationText');
+  const editButton = document.getElementById('editButton');
 
-    let lastSubmittedName = "";
+  let lastSubmittedName = "";
 
-    form.addEventListener("submit", function(e) {
-      e.preventDefault();
+  form.addEventListener("submit", function(e) {
+    e.preventDefault();
 
-      const fullName = nameInput.value.trim();
-      lastSubmittedName = fullName;
+    const formData = new FormData();
+    const fullName = nameInput.value.trim();
+    lastSubmittedName = fullName;
 
-      fetch(scriptURL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: fullName })
-      })
-      .then(response => response.text())
-      .then(result => {
-        confirmationText.innerText = `Submitted: "${fullName}"`;
-        successMessage.classList.remove('d-none');
-        nameInput.value = '';
-      })
-      .catch(error => alert("Fetch Error: " + error.message));
-    });
+    formData.append("name", fullName);
 
-    editButton.addEventListener("click", function() {
-      nameInput.value = lastSubmittedName;
-      nameInput.focus();
-      successMessage.classList.add('d-none');
-    });
-  </script>
+    fetch(scriptURL, {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.text())
+    .then(result => {
+      confirmationText.innerText = `Submitted: "${fullName}"`;
+      successMessage.classList.remove('d-none');
+      nameInput.value = '';
+    })
+    .catch(error => alert("Fetch Error: " + error.message));
+  });
+
+  editButton.addEventListener("click", function() {
+    nameInput.value = lastSubmittedName;
+    nameInput.focus();
+    successMessage.classList.add('d-none');
+  });
+</script>
+
 </body>
 </html>
