@@ -60,7 +60,7 @@
   </div>
 
   <!-- JavaScript -->
- <script>
+<script>
   const scriptURL = 'https://script.google.com/macros/s/AKfycbwpEpGG28ft5OU4Fdy3VJLD-Z4PpQPNElY16dbjYE1WM7OxBLJZMq61FoTzETnxxjrq/exec';
   const form = document.getElementById('nameForm');
   const nameInput = document.getElementById('name');
@@ -73,18 +73,18 @@
   form.addEventListener("submit", function(e) {
     e.preventDefault();
 
-    const formData = new FormData();
     const fullName = nameInput.value.trim();
     lastSubmittedName = fullName;
 
+    const formData = new FormData();
     formData.append("name", fullName);
 
     fetch(scriptURL, {
       method: 'POST',
-      body: formData
+      body: formData,
+      mode: 'no-cors' // ← important to bypass CORS!
     })
-    .then(response => response.text())
-    .then(result => {
+    .then(() => {
       confirmationText.innerText = `Submitted: "${fullName}"`;
       successMessage.classList.remove('d-none');
       nameInput.value = '';
