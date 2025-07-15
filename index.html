@@ -64,17 +64,12 @@
   const scriptURL = 'https://script.google.com/macros/s/AKfycbwpEpGG28ft5OU4Fdy3VJLD-Z4PpQPNElY16dbjYE1WM7OxBLJZMq61FoTzETnxxjrq/exec';
   const form = document.getElementById('nameForm');
   const nameInput = document.getElementById('name');
-  const successMessage = document.getElementById('successMessage');
-  const confirmationText = document.getElementById('confirmationText');
-  const editButton = document.getElementById('editButton');
-
-  let lastSubmittedName = "";
 
   form.addEventListener("submit", function(e) {
     e.preventDefault();
 
     const fullName = nameInput.value.trim();
-    lastSubmittedName = fullName;
+    if (!fullName) return alert("Please enter a name.");
 
     const formData = new FormData();
     formData.append("name", fullName);
@@ -82,22 +77,14 @@
     fetch(scriptURL, {
       method: 'POST',
       body: formData,
-      mode: 'no-cors' // ← important to bypass CORS!
-    })
-    .then(() => {
-      confirmationText.innerText = `Submitted: "${fullName}"`;
-      successMessage.classList.remove('d-none');
-      nameInput.value = '';
-    })
-    .catch(error => alert("Fetch Error: " + error.message));
-  });
+      mode: 'no-cors'
+    });
 
-  editButton.addEventListener("click", function() {
-    nameInput.value = lastSubmittedName;
-    nameInput.focus();
-    successMessage.classList.add('d-none');
+    nameInput.value = '';
+    alert("Submitted! Check your Google Sheet.");
   });
 </script>
+
 
 </body>
 </html>
