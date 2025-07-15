@@ -77,11 +77,12 @@
     const fullName = nameInput.value.trim();
     lastSubmittedName = fullName;
 
-    fetch(scriptURL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: fullName })
-    })
+    fetch('https://script.google.com/macros/s/AKfycbweuTNshOK1cs1GWEZ-eNwnAYs-KuN5aqIXKTlY0B5ZnhdZIYu0AELqGe_LBXJFkqDJ/exec', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ name: fullName })
+})
+
     .then(response => response.text())
     .then(result => {
       confirmationText.innerText = `Submitted: "${fullName}"`;
