@@ -70,31 +70,26 @@
 
     let lastSubmittedName = "";
 
-    form.addEventListener("submit", function(e) {
-      e.preventDefault();
+form.addEventListener("submit", function(e) {
+  e.preventDefault();
 
-      const fullName = nameInput.value.trim();
-      lastSubmittedName = fullName;
+  const fullName = nameInput.value.trim();
+  lastSubmittedName = fullName;
 
-      fetch(scriptURL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: fullName })
-      })
-      .then(response => response.text())
-      .then(result => {
-        confirmationText.innerText = `Submitted: "${fullName}"`;
-        successMessage.classList.remove('d-none');
-        nameInput.value = '';
-      })
-      .catch(error => alert("Fetch Error: " + error.message));
-    });
+  fetch(scriptURL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ name: fullName })
+  })
+  .then(response => response.text())
+  .then(result => {
+    confirmationText.innerText = `Submitted: "${fullName}"`;
+    successMessage.classList.remove('d-none');
+    nameInput.value = '';
+  })
+  .catch(error => alert("Fetch Error: " + error.message));
+});
 
-    editButton.addEventListener("click", function() {
-      nameInput.value = lastSubmittedName;
-      nameInput.focus();
-      successMessage.classList.add('d-none');
-    });
   </script>
 </body>
 </html>
