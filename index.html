@@ -150,5 +150,37 @@
         });
     }
   </script>
+<script>
+  // View switcher for login, register, and dashboard
+  function showSection(sectionId) {
+    const sections = ['login-section', 'register-section', 'dashboard-section'];
+    const navButtons = document.querySelectorAll(".nav-link");
+
+    // Hide all sections
+    sections.forEach(id => {
+      document.getElementById(id).style.display = 'none';
+    });
+
+    // Remove 'active' class from all nav buttons
+    navButtons.forEach(btn => btn.classList.remove('active'));
+
+    // Show selected section
+    document.getElementById(sectionId + '-section').style.display = 'block';
+
+    // Set active tab
+    document.querySelector(`.nav-link[onclick*="${sectionId}"]`).classList.add('active');
+
+    // If dashboard, load the content
+    if (sectionId === 'dashboard') {
+      loadDashboard();
+    }
+  }
+
+  // Optional: Set default view
+  window.onload = () => {
+    showSection('login');
+  };
+</script>
+
 </body>
 </html>
